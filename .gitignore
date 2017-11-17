@@ -7,3 +7,9 @@ run/
 .DS_Store
 *.swp
 
+**/*.d.ts
+!typings/**/*.d.ts
+
+
+lib/**/*.js
+app/**/*.js
