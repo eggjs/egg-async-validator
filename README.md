@@ -22,8 +22,6 @@
 
 Async validate plugin for egg, sharing validator scheme between frontend and backend with [Ant Design style](https://ant.design/components/form-cn/)
 
-See [async-validator](https://github.com/yiminghe/async-validator) for more information such as custom rule.
-
 ## Install
 
 ```bash
@@ -40,7 +38,12 @@ exports.validate = {
 };
 ```
 
-## Validate rules
+## Usage
+
+> validate(scheme, options)(values)
+
+### Define scheme, validate rules
+> See [async-validator](https://github.com/yiminghe/async-validator) for more information such as custom rule
 
 validate based on scheme, which define the shape of form fields, as simple as following
 
@@ -53,12 +56,22 @@ const productScheme = {
 };
 ```
 
-### Validate Request Body
+### Validate in .jsx file with [antd.Form](https://ant.design/components/form-cn)
+
+```jsx
+<Form.Item>
+{getFieldDecorator('id', {
+  rules: productScheme.id,    // share the scheme here
+})(<Input />)}
+</Form.Item>
+```
+
+### Validate Request Body in chair.Controller
 
 ```js
 // app/controller/home.js
 exports.index = async () => {
-  const error = await this.validate(productScheme)(this.request.body);
+  const error = await this.validate(productScheme, options)(this.request.body);
   if (error) {
     // throw manually
   }
@@ -72,12 +85,18 @@ The package is so simple that it's easy to use as a npm module
 ```ts
 import { validate } from 'egg-async-validator';
 
-const errors = await validate(productScheme)(values);
+const errors = await validate(productScheme, options)(values);
 if (errors) {
   // erros maybe [{ fields: 'id', message: 'why it fail' }] or null
   // throw
 }
 ```
+
+## Options
+
+The Validator provides some options for porable use in some cases
+
+- checkRequire: `default true` if false, skip all required rules check for values, it's very useful for validating partial params in a patch update request
 
 ## Typings
 
