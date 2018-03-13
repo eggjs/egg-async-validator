@@ -20,9 +20,7 @@
 [download-image]: https://img.shields.io/npm/dm/egg-async-validator.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-async-validator
 
-Async validate plugin for egg.
-
-See [async-validator](https://github.com/yiminghe/async-validator) for more information such as custom rule.
+Async validate plugin for egg, sharing validator scheme between frontend and backend with [Ant Design style](https://ant.design/components/form-cn/)
 
 ## Install
 
@@ -40,24 +38,77 @@ exports.validate = {
 };
 ```
 
-## Validate rules
+## Usage
 
-All validate rules store on `app/xxxx`
+> validate(scheme, options)(values)
 
-### Validate Request Body
+### Define scheme, validate rules
+> See [async-validator](https://github.com/yiminghe/async-validator) for more information such as custom rule
+
+validate based on scheme, which define the shape of form fields, as simple as following
+
+```js
+const productScheme = {
+  id: [{
+    type: 'string',
+    required: true,
+  }]
+};
+```
+
+### Validate in .jsx file with [antd.Form](https://ant.design/components/form-cn)
+
+```jsx
+<Form.Item>
+{getFieldDecorator('id', {
+  rules: productScheme.id,    // share the scheme here
+})(<Input />)}
+</Form.Item>
+```
+
+### Validate Request Body in chair.Controller
 
 ```js
 // app/controller/home.js
 exports.index = async () => {
-  await this.validate({ id: 'id' }); // will throw if invalid
-  // or
-  const errors = await this.validator.validate({ id: 'id' }, this.request.body);
+  const error = await this.validate(productScheme, options)(this.request.body);
+  if (error) {
+    // throw manually
+  }
 };
 ```
 
-### Extend Rules
+### Tips
 
-TBD
+The package is so simple that it's easy to use as a npm module
+
+```ts
+import { validate } from 'egg-async-validator';
+
+const errors = await validate(productScheme, options)(values);
+if (errors) {
+  // erros maybe [{ fields: 'id', message: 'why it fail' }] or null
+  // throw
+}
+```
+
+## Options
+
+The Validator provides some options for porable use in some cases
+
+- ignoreRequire: `default false` if true, skip all required rules check for values, it's very useful for validating partial params in a patch update request
+
+## Typings
+
+```ts
+// chair.d.ts
+import { ValidateType } from 'egg-async-validator';
+declare module 'chair' {
+  export interface Context {
+    validate: ValidateType,
+  }
+}
+```
 
 ## Questions & Suggestions
 

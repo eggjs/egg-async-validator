@@ -1,10 +1,16 @@
 {
   "name": "egg-async-validator",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "async validate plugin base on async-validator",
   "eggPlugin": {
     "name": "validate"
   },
+  "main": "./lib/validator",
+  "typings": "./lib/validator.d.ts",
+  "files": [
+    "lib",
+    "app"
+  ],
   "keywords": [
     "egg",
     "eggPlugin",
@@ -12,7 +18,9 @@
     "validate",
     "async-validator"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "async-validator": "^1.8.1"
+  },
   "devDependencies": {
     "autod": "^2.7.1",
     "egg": "^1.0.0-rc.2",
@@ -22,27 +30,23 @@
     "eslint": "^3.16.1",
     "eslint-config-egg": "^3.2.0",
     "supertest": "^3.0.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.7.1",
     "webstorm-disable-index": "^1.1.2"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "scripts": {
-    "test": "npm run lint -- --fix && npm run test-local",
+    "tsc": "tsc -d",
+    "test": "npm run tsc && npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
     "cov": "egg-bin cov",
-    "lint": "eslint .",
-    "ci": "npm run lint && npm run cov",
+    "lint": "tslint \"lib/**/*.ts\" \"app/**/*.ts\"",
+    "ci": "npm run tsc && npm run lint && npm run cov",
+    "pub": "npm run tsc && npm publish",
     "autod": "autod"
   },
-  "files": [
-    "index.js",
-    "app.js",
-    "agent.js",
-    "config",
-    "app",
-    "lib"
-  ],
   "ci": {
     "version": "6, 7",
     "license": true
