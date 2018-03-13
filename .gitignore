@@ -8,7 +8,7 @@ run/
 *.swp
 
 **/*.d.ts
-!typings/**/*.d.ts
+!app/typings/**/*.d.ts
 
 
 lib/**/*.js

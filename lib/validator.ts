@@ -1,21 +1,17 @@
-import * as Validator from 'async-validator';
+import Validator, { ErrorField, Scheme } from 'async-validator';
 
-export interface IErrorField {
-  field: string;
-  message: string;
+export interface Options {
+  ignoreRequire: boolean;
 }
 
-export interface ISchemeOptions {
-  checkRequire: boolean;
-}
+export { ErrorField, Scheme };
 
-export const validate = (scheme, options: ISchemeOptions = {
-  checkRequire: true,
-}) => async (values) => {
-  const testScheme = options && options.checkRequire
-    ? scheme
-    : ignoreRequire(scheme);
-  return new Promise<IErrorField[] | null>((resolve, reject) => {
+export type ValidateType = (scheme: Scheme, options?: Options) =>
+  (values: { [key: string]: any }) => Promise<ErrorField[] | null>;
+
+export const validate = (scheme: Scheme, options: Options = { ignoreRequire: false }) => async (values: any) => {
+  const testScheme = options && options.ignoreRequire ? ignoreRequire(scheme) : scheme;
+  return new Promise<ErrorField[] | null>((resolve, reject) => {
     try {
       new Validator(testScheme).validate(values, resolve);
     } catch (e) {

@@ -6,6 +6,11 @@
       "single",
       "jsx-double"
     ],
-    "arrow-parens": false
+    "arrow-parens": false,
+    "interface-name": false,
+    "max-line-length": [
+      true,
+      200
+    ]
   }
 }

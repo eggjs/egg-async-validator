@@ -96,16 +96,16 @@ if (errors) {
 
 The Validator provides some options for porable use in some cases
 
-- checkRequire: `default true` if false, skip all required rules check for values, it's very useful for validating partial params in a patch update request
+- ignoreRequire: `default false` if true, skip all required rules check for values, it's very useful for validating partial params in a patch update request
 
 ## Typings
 
 ```ts
 // chair.d.ts
-import { IErrorField, ISchemeOptions } from 'egg-async-validator';
+import { ValidateType } from 'egg-async-validator';
 declare module 'chair' {
   export interface Context {
-    validate: (scheme: any, options?: ISchemeOptions) => (values: any) => Promise<IErrorField[] | null>
+    validate: ValidateType,
   }
 }
 ```
