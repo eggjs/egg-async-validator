@@ -20,9 +20,7 @@
 [download-image]: https://img.shields.io/npm/dm/egg-validate.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-validate
 
-<!--
-Description here.
--->
+借助 [async-validator](https://github.com/yiminghe/async-validator)，支持参数的灵活校验和自定义message，弥补egg-validate插件的不足（自定义message的支持问题）
 
 ## 依赖说明
 
@@ -34,30 +32,93 @@ egg-validate 版本 | egg 1.x
 0.x | ❌
 
 ### 依赖的插件
-<!--
 
-如果有依赖其它插件，请在这里特别说明。如
-
-- security
-- multipart
-
--->
+[async-validator](https://github.com/yiminghe/async-validator)
 
 ## 开启插件
 
 ```js
 // config/plugin.js
-exports.validate = {
+exports.asyncValidator = {
   enable: true,
-  package: 'egg-validate',
+  package: 'egg-async-validator',
 };
 ```
 
 ## 使用场景
 
-- Why and What: 描述为什么会有这个插件，它主要在完成一件什么事情。
-尽可能描述详细。
-- How: 描述这个插件是怎样使用的，具体的示例代码，甚至提供一个完整的示例，并给出链接。
+```js
+// app/controller/index.js
+exports.index = async () => {
+  const rules = {
+    id: {
+      type: 'number',
+      required: true
+    },
+    name: {
+      type: 'string',
+      required: true,
+      max: 126,
+    }
+  }
+  const error = await ctx.validate(rules, ctx.request.body)
+  if (error) {
+    ctx.body = {
+      success: false,
+      message: `参数错误：${error}`
+    }
+    return false
+  }
+};
+```
+
+使用 async-validator 来校验参数的合法性，内置一套校验错误中文提示信息，如下：
+
+```json
+{
+  "default": "%s校验失败",
+  "required": "%s是必填项",
+  "enum": "%s必须是%s中的一个",
+  "whitespace": "%s非空",
+  "types": {
+    "string": "%s不是有效%s",
+    "array": "%s不是有效%s",
+    "object": "%s不是有效%s",
+    "number": "%s不是有效%s",
+    "date": "%s不是有效%s",
+    "boolean": "%s不是有效%s",
+    "integer": "%s不是有效%s",
+    "float": "%s不是有效%s",
+    "regexp": "%ss不是有效%s",
+    "email": "%s不是有效%s",
+    "url": "%s不是有效%s",
+    "hex": "%s不是有效%s"
+  },
+  "string": {
+    "len": "%s必须是%s个字符",
+    "min": "%s最少%s个字符",
+    "max": "%s最多%s个字符",
+    "range": "%s长度必须在%s~%s之间"
+  },
+  "number": {
+    "len": "%s必须等于%s",
+    "min": "%s不能小于%s",
+    "max": "%s不能大于%s",
+    "range": "%s必须是[%s,%s]间的值"
+  },
+  "array": {
+    "len": "%s长度必须等于%s",
+    "min": "%s长度不能小于%s",
+    "max": "%s长度不能大于%s",
+    "range": "%s长度必须在%s~%s之间"
+  },
+  "pattern": {
+    "mismatch": "%s值%s格式%s匹配失败"
+  }
+}
+```
+
+更多高级规则可参考 [async-validator](https://github.com/yiminghe/async-validator)
 
 ## 详细配置
 
@@ -65,7 +126,7 @@ exports.validate = {
 
 ## 单元测试
 
-<!-- 描述如何在单元测试中使用此插件，例如 schedule 如何触发。无则省略。-->
+暂无
 
 ## 提问交流
 

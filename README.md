@@ -34,7 +34,7 @@ $ npm i egg-async-validator --save
 
 ```js
 // config/plugin.js
-exports.validate = {
+exports.asyncValidator = {
   enable: true,
   package: 'egg-async-validator',
 };
@@ -47,11 +47,27 @@ All validate rules store on `app/xxxx`
 ### Validate Request Body
 
 ```js
-// app/controller/home.js
+// app/controller/index.js
 exports.index = async () => {
-  await this.validate({ id: 'id' }); // will throw if invalid
-  // or
-  const errors = await this.validator.validate({ id: 'id' }, this.request.body);
+  const rules = {
+    id: {
+      type: 'number',
+      required: true
+    },
+    name: {
+      type: 'string',
+      required: true,
+      max: 126,
+    }
+  }
+  const error = await ctx.validate(rules, ctx.request.body)
+  if (error) {
+    ctx.body = {
+      success: false,
+      message: `参数错误：${error}`
+    }
+    return false
+  }
 };
 ```
 
