@@ -1,51 +1,50 @@
 {
   "name": "egg-async-validator",
-  "version": "1.0.0",
-  "description": "async validate plugin base on async-validator",
+  "version": "1.0.1",
+  "description": "async-validator plugin for egg",
   "eggPlugin": {
-    "name": "validate"
+    "name": "asyncValidator"
   },
+  "files": [
+    "app",
+    "config",
+    "agent.js",
+    "app.js",
+    "index.d.ts"
+  ],
   "keywords": [
     "egg",
     "eggPlugin",
     "egg-plugin",
-    "validate",
-    "async-validator"
+    "egg-async-validator"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "async-validator": "^4.0.7"
+  },
   "devDependencies": {
-    "autod": "^2.7.1",
-    "egg": "^1.0.0-rc.2",
-    "egg-bin": "^2.2.3",
-    "egg-ci": "^1.3.0",
-    "egg-mock": "^3.0.1",
-    "eslint": "^3.16.1",
-    "eslint-config-egg": "^3.2.0",
-    "supertest": "^3.0.0",
-    "webstorm-disable-index": "^1.1.2"
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg": "^2.16.0",
+    "egg-bin": "^4.11.0",
+    "egg-ci": "^1.11.0",
+    "egg-mock": "^3.21.0",
+    "eslint": "^5.13.0",
+    "eslint-config-egg": "^7.1.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
-    "test": "npm run lint -- --fix && npm run test-local",
+    "test": "npm run lint -- --fix && egg-bin pkgfiles && npm run test-local",
     "test-local": "egg-bin test",
     "cov": "egg-bin cov",
     "lint": "eslint .",
-    "ci": "npm run lint && npm run cov",
+    "ci": "egg-bin pkgfiles --check && npm run lint && npm run cov",
+    "pkgfiles": "egg-bin pkgfiles",
     "autod": "autod"
   },
-  "files": [
-    "index.js",
-    "app.js",
-    "agent.js",
-    "config",
-    "app",
-    "lib"
-  ],
   "ci": {
-    "version": "6, 7",
-    "license": true
+    "version": "8, 10"
   },
   "repository": {
     "type": "git",
@@ -55,6 +54,6 @@
     "url": "https://github.com/eggjs/egg/issues"
   },
   "homepage": "https://github.com/eggjs/egg-async-validator#readme",
-  "author": "fengmk2",
+  "author": "",
   "license": "MIT"
 }

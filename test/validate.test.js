@@ -18,7 +18,7 @@ describe('test/validate.test.js', () => {
   it('should GET /', () => {
     return request(app.callback())
       .get('/')
-      .expect('hi, validate')
+      .expect('hi, asyncValidator')
       .expect(200);
   });
 });
